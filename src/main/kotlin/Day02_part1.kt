@@ -1,4 +1,4 @@
-class Submarine(var horizontalPosition: Int = 0, var depth: Int = 0) {
+class Submarine(var horizontalPosition: Int = 0, var depth: Int = 0, var aim: Int = 0) {
 
     fun executeCommand(command: Command) {
         command.moveSubmarine(this)
@@ -21,18 +21,19 @@ sealed class Command(var value: Int) {
 class Forward(value: Int) : Command(value) {
     override fun moveSubmarine(submarine: Submarine) {
         submarine.horizontalPosition += value
+        submarine.depth += submarine.aim * value
     }
 }
 
 class Down(value: Int) : Command(value) {
     override fun moveSubmarine(submarine: Submarine) {
-        submarine.depth += value
+        submarine.aim += value
     }
 }
 
 class Up(value: Int) : Command(value) {
     override fun moveSubmarine(submarine: Submarine) {
-        submarine.depth -= value
+        submarine.aim -= value
     }
 }
 
@@ -49,11 +50,11 @@ fun commandFromInput(commandString: String): Command {
 
 fun main() {
 
-    println(part1Day2(readInput("Day02_test")))
-    println(part1Day2(readInput("Day02")))
+    println(part2Day2(readInput("Day02_test")))
+    println(part2Day2(readInput("Day02")))
 }
 
-fun part1Day2(input: List<String>): Int {
+fun part2Day2(input: List<String>): Int {
     val submarine = Submarine()
     input.map { commandFromInput(it) }.forEach { submarine.executeCommand(it); println(submarine) }
 
