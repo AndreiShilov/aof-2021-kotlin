@@ -16,4 +16,18 @@ internal class Day4Test {
             assertEquals(4512, winnerScore)
         }
     }
+
+    class Part2 {
+        @Test
+        fun `Should return for sample Data`() {
+            // given
+            val readInput = readInput("Day04_test")
+
+            // when
+            val winnerScore = Day4.part2(readInput);
+
+            // then
+            assertEquals(1924, winnerScore)
+        }
+    }
 }

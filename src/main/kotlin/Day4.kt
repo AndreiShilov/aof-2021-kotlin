@@ -5,13 +5,17 @@ class Day4 {
         fun part1(input: List<String>): Int {
             return BingoGame(input).play()
         }
+
+        fun part2(input: List<String>): Int {
+            return BingoGame(input).play()
+        }
     }
 
 }
 
 
 fun main() {
-    val result = Day4.part1(readInput("Day04"))
+    val result = Day4.part2(readInput("Day04"))
     println(result)
 }
 
@@ -26,9 +30,14 @@ class BingoGame(input: List<String>) {
     }
 
     fun play(): Int {
+        val passedBoards = mutableSetOf<Int>()
+
         for (number in numbers) {
-            for (board in boards) {
-                if (board.newRound(number)) {
+            for ((index, board) in boards.withIndex()) {
+                if (!passedBoards.contains(index) && board.newRound(number)) {
+                    passedBoards.add(index)
+                }
+                if (passedBoards.size == boards.size) {
                     return board.sumUnmarked() * number
                 }
             }
