@@ -1,29 +1,35 @@
 class Day06 {
     companion object {
-        fun part1(input: List<String>, days: Int): Int {
+        fun part1(input: List<String>, days: Int): Long {
             val initialState: MutableList<Int> = input[0].split(",").map { it.toInt() }.toMutableList()
 
-            var fishToAddCounter = 0
-            var fishTotalCounter = 0
-            for (k in 0 until initialState.size) {
-                val initialStateSingle = mutableListOf(initialState[k])
-                for (i in 1..days) {
-                    for (j in 0 until initialStateSingle.size) if (initialStateSingle[j] == 0) {
-                        initialStateSingle[j] = 6
-                        fishToAddCounter += 1
-                    } else initialStateSingle[j] -= 1
-                    initialStateSingle.addAll(IntArray(fishToAddCounter) { 8 }.toList())
-                    fishToAddCounter = 0
-                    println(initialStateSingle.size)
-                }
-                fishTotalCounter += initialStateSingle.size
+            return initialState
+                .groupBy { it }
+                .entries
+                .map { entry -> Pair(entry.key, entry.value.count()) }
+                .sumOf { pair -> getChildren(pair.first, days) * pair.second } + initialState.size
+
+        }
+
+        private fun getChildren(initialDay: Int, days: Int): Long {
+            val daysLeft = days - (initialDay + 1)
+
+            if (daysLeft < 0) {
+                return 0
             }
 
-            return fishTotalCounter
+            val childrenCount: Long = daysLeft / 7 + 1L
+            var totalAllDescendentsCount: Long = childrenCount
+
+            for (i in 0 until childrenCount) {
+                totalAllDescendentsCount += getChildren(8, (daysLeft - i * 7).toInt())
+            }
+
+            return totalAllDescendentsCount
         }
     }
 }
 
 fun main() {
-    println(Day06.part1(readInput("Day06"), 80))
+    println(Day06.part1(readInput("Day06"), 256))
 }
