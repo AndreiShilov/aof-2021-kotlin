@@ -4,18 +4,22 @@ class Day06 {
             val initialState: MutableList<Int> = input[0].split(",").map { it.toInt() }.toMutableList()
 
             var fishToAddCounter = 0
-            for (i in 1..days) {
-                for (k in 0 until initialState.size) {
-                    if (initialState[k] == 0) {
-                        initialState[k] = 6
+            var fishTotalCounter = 0
+            for (k in 0 until initialState.size) {
+                val initialStateSingle = mutableListOf(initialState[k])
+                for (i in 1..days) {
+                    for (j in 0 until initialStateSingle.size) if (initialStateSingle[j] == 0) {
+                        initialStateSingle[j] = 6
                         fishToAddCounter += 1
-                    } else initialState[k] -= 1
+                    } else initialStateSingle[j] -= 1
+                    initialStateSingle.addAll(IntArray(fishToAddCounter) { 8 }.toList())
+                    fishToAddCounter = 0
+                    println(initialStateSingle.size)
                 }
-                initialState.addAll(IntArray(fishToAddCounter) { 8 }.toList())
-                fishToAddCounter = 0
+                fishTotalCounter += initialStateSingle.size
             }
 
-            return initialState.size
+            return fishTotalCounter
         }
     }
 }
